@@ -1,4 +1,5 @@
 import { MatchListByDate } from "@/features/matches/components/MatchListByDate";
+import { PredictionTicker } from "@/features/predictions/components/PredictionTicker";
 import { BadgeCheck, Medal, TrendingDown, Trophy } from "lucide-react";
 
 export default function HomePage() {
@@ -14,7 +15,7 @@ export default function HomePage() {
               <Trophy className="h-4 w-4 text-emerald-400" />
               FIFA World Cup 2026 Prediction League
             </div>
-
+          
             <div className="space-y-4">
               <h1 className="font-heading text-4xl font-black tracking-tight md:text-6xl">
                 Predict every match.
@@ -76,6 +77,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      <PredictionTicker />
 
       <MatchListByDate />
     </section>

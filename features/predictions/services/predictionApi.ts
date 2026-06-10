@@ -16,3 +16,8 @@ export const getMyPredictions = async () => {
   const response = await api.get("/predictions/my");
   return response.data.data;
 };
+
+export const getPredictionTicker = async () => {
+  const response = await api.get("/predictions/ticker");
+  return response.data.data;
+};

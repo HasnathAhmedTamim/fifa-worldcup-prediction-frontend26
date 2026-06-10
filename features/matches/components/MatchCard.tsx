@@ -56,7 +56,7 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
     <Card className="modern-card overflow-hidden">
       <CardContent className="p-0">
         <div className="grid gap-0 lg:grid-cols-[1fr_0.85fr]">
-          <div className="space-y-5 p-5 md:p-6">
+          <div className="space-y-4 p-4 sm:space-y-5 sm:p-5 md:p-6">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant={getStatusVariant()} className="capitalize">
                 {match.status}
@@ -76,21 +76,23 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
                 Match {match.match_no} • {match.round_name}
               </p>
 
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-                <div className="rounded-3xl border bg-background/40 p-4">
+              <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
+                <div className="rounded-3xl border bg-background/40 p-4 text-center md:text-left">
                   <p className="text-xs text-muted-foreground">Team A</p>
-                  <h3 className="mt-1 font-heading text-xl font-black md:text-2xl">
+
+                  <h3 className="mt-1 break-words font-heading text-xl font-black leading-tight sm:text-2xl">
                     {teamA}
                   </h3>
                 </div>
 
-                <div className="flex h-11 w-11 items-center justify-center rounded-full border bg-secondary text-sm font-black">
+                <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border bg-secondary text-sm font-black md:mx-0">
                   VS
                 </div>
 
-                <div className="rounded-3xl border bg-background/40 p-4 text-right">
+                <div className="rounded-3xl border bg-background/40 p-4 text-center md:text-right">
                   <p className="text-xs text-muted-foreground">Team B</p>
-                  <h3 className="mt-1 font-heading text-xl font-black md:text-2xl">
+
+                  <h3 className="mt-1 break-words font-heading text-xl font-black leading-tight sm:text-2xl">
                     {teamB}
                   </h3>
                 </div>
@@ -98,16 +100,18 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
             </div>
 
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="flex items-center gap-2 rounded-2xl border bg-background/40 p-3 text-sm text-muted-foreground">
-                <CalendarDays className="h-4 w-4 text-emerald-400" />
-                <span>
+              <div className="flex items-start gap-2 rounded-2xl border bg-background/40 p-3 text-sm text-muted-foreground">
+                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+
+                <span className="break-words">
                   {getDateOnly(match.match_date)} at {match.match_time}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 rounded-2xl border bg-background/40 p-3 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 text-emerald-400" />
-                <span>{match.venue}</span>
+              <div className="flex items-start gap-2 rounded-2xl border bg-background/40 p-3 text-sm text-muted-foreground">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+
+                <span className="break-words">{match.venue}</span>
               </div>
             </div>
 
@@ -130,9 +134,9 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
             )}
           </div>
 
-          <div className="border-t bg-background/25 p-5 md:p-6 lg:border-l lg:border-t-0">
-            <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-card">
+          <div className="border-t bg-background/25 p-4 sm:p-5 md:p-6 lg:border-l lg:border-t-0">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border bg-card">
                 {match.stage === "knockout" ? (
                   <Trophy className="h-5 w-5 text-amber-400" />
                 ) : (
@@ -140,8 +144,9 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
                 )}
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <p className="font-heading font-bold">Prediction Panel</p>
+
                 <p className="text-xs text-muted-foreground">
                   {existingPrediction
                     ? "Update before kickoff"
@@ -161,7 +166,7 @@ export const MatchCard = ({ match, existingPrediction }: Props) => {
                 existingPrediction={existingPrediction}
               />
             ) : (
-              <div className="rounded-3xl border bg-card/60 p-5 text-sm text-muted-foreground">
+              <div className="rounded-3xl border bg-card/60 p-4 text-sm text-muted-foreground sm:p-5">
                 Prediction form is unavailable for this match.
               </div>
             )}

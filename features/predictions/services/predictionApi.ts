@@ -18,6 +18,6 @@ export const getMyPredictions = async () => {
 };
 
 export const getPredictionTicker = async () => {
-  const response = await api.get("/predictions/ticker");
-  return response.data.data;
+  const { data } = await api.get("/predictions/ticker");
+  return data.data;
 };

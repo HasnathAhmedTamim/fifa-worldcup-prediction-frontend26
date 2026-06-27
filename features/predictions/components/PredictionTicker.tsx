@@ -28,7 +28,7 @@ export const PredictionTicker = () => {
     const { data, isLoading, isError } = useQuery<PredictionTickerItem[]>({
         queryKey: ["prediction-ticker"],
         queryFn: getPredictionTicker,
-        refetchInterval: 10000,
+        refetchInterval: 100000,
     });
 
     if (isLoading || isError || !data || data.length === 0) {
@@ -68,7 +68,7 @@ export const PredictionTicker = () => {
             <div className="flex items-center gap-3 whitespace-nowrap">
                 <div className="z-10 flex shrink-0 items-center gap-2 border-r bg-background px-4 py-3 text-sm font-black text-emerald-400">
                     <Flame className="h-4 w-4" />
-                    Prediction Buzz
+                    Prediction Buzzer
                 </div>
 
                 <div className="ticker-track flex min-w-max gap-8 py-3 text-sm font-semibold">

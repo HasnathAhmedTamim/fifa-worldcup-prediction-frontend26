@@ -28,7 +28,7 @@ export const PredictionTicker = () => {
     const { data, isLoading, isError } = useQuery<PredictionTickerItem[]>({
         queryKey: ["prediction-ticker"],
         queryFn: getPredictionTicker,
-        refetchInterval: 100000,
+        refetchInterval: 10000,
     });
 
     if (isLoading || isError || !data || data.length === 0) {

@@ -27,15 +27,22 @@ type Props = {
     existingPrediction?: ExistingPrediction | null;
 };
 
-export const PredictionForm = ({ match, existingPrediction }: Props) => {
+export const PredictionForm = ({
+    match,
+    existingPrediction,
+}: Props) => {
     const queryClient = useQueryClient();
 
     const [teamAScore, setTeamAScore] = useState(
-        existingPrediction ? String(existingPrediction.predicted_team_a_score) : ""
+        existingPrediction
+            ? String(existingPrediction.predicted_team_a_score)
+            : ""
     );
 
     const [teamBScore, setTeamBScore] = useState(
-        existingPrediction ? String(existingPrediction.predicted_team_b_score) : ""
+        existingPrediction
+            ? String(existingPrediction.predicted_team_b_score)
+            : ""
     );
 
     const [qualifier, setQualifier] = useState(
@@ -46,12 +53,21 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
 
     const mutation = useMutation({
         mutationFn: submitPrediction,
+
         onSuccess: () => {
             setErrorMessage("");
 
-            queryClient.invalidateQueries({ queryKey: ["my-predictions"] });
-            queryClient.invalidateQueries({ queryKey: ["leaderboard"] });
-            queryClient.invalidateQueries({ queryKey: ["matches-by-date"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-predictions"],
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["leaderboard"],
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["matches-by-date"],
+            });
 
             toast.success(
                 existingPrediction
@@ -59,9 +75,11 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
                     : "Prediction submitted successfully"
             );
         },
+
         onError: (error: any) => {
             const message =
-                error.response?.data?.message || "Failed to submit prediction";
+                error.response?.data?.message ||
+                "Failed to submit prediction";
 
             setErrorMessage(message);
             toast.error(message);
@@ -69,6 +87,8 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
     });
 
     const isDrawPrediction =
+        teamAScore !== "" &&
+        teamBScore !== "" &&
         Number(teamAScore) === Number(teamBScore);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -82,7 +102,6 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
             return;
         }
 
-        // Qualifier only required when user predicts a draw
         if (
             match.stage === "knockout" &&
             isDrawPrediction &&
@@ -107,18 +126,26 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
         <form onSubmit={handleSubmit} className="space-y-4">
             {existingPrediction && (
                 <div className="rounded-3xl border bg-secondary/40 p-4 text-sm">
-                    <p className="font-semibold">Current Prediction</p>
+                    <p className="font-semibold">
+                        Current Prediction
+                    </p>
 
                     <p className="mt-1 text-muted-foreground">
                         {match.team_a}{" "}
-                        {existingPrediction.predicted_team_a_score} -{" "}
-                        {existingPrediction.predicted_team_b_score}{" "}
+                        {existingPrediction.predicted_team_a_score}
+                        {" - "}
+                        {
+                            existingPrediction.predicted_team_b_score
+                        }{" "}
                         {match.team_b}
                     </p>
 
                     {existingPrediction.predicted_qualifier && (
                         <p className="mt-1 text-xs text-muted-foreground">
-                            Qualifier: {existingPrediction.predicted_qualifier}
+                            Qualifier:{" "}
+                            {
+                                existingPrediction.predicted_qualifier
+                            }
                         </p>
                     )}
                 </div>
@@ -140,9 +167,22 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
                         type="number"
                         min={0}
                         value={teamAScore}
-                        onChange={(e) => setTeamAScore(e.target.value)}
                         placeholder="0"
                         className="soft-input h-12 text-center text-lg font-black"
+                        onChange={(e) => {
+                            const value = e.target.value;
+
+                            setTeamAScore(value);
+
+                            if (
+                                value === "" ||
+                                teamBScore === "" ||
+                                Number(value) !==
+                                Number(teamBScore)
+                            ) {
+                                setQualifier("");
+                            }
+                        }}
                     />
                 </div>
 
@@ -159,48 +199,68 @@ export const PredictionForm = ({ match, existingPrediction }: Props) => {
                         type="number"
                         min={0}
                         value={teamBScore}
-                        onChange={(e) => setTeamBScore(e.target.value)}
                         placeholder="0"
                         className="soft-input h-12 text-center text-lg font-black"
+                        onChange={(e) => {
+                            const value = e.target.value;
+
+                            setTeamBScore(value);
+
+                            if (
+                                teamAScore === "" ||
+                                value === "" ||
+                                Number(teamAScore) !==
+                                Number(value)
+                            ) {
+                                setQualifier("");
+                            }
+                        }}
                     />
                 </div>
             </div>
 
-            {match.stage === "knockout" && isDrawPrediction && (
-                <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground">
-                        Who will qualify?
-                    </p>
+            {match.stage === "knockout" &&
+                isDrawPrediction && (
+                    <div className="space-y-2">
+                        <p className="text-xs font-semibold text-muted-foreground">
+                            Who will qualify?
+                        </p>
 
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button
-                            type="button"
-                            variant={
-                                qualifier === match.team_a
-                                    ? "default"
-                                    : "secondary"
-                            }
-                            className="smooth-button rounded-2xl"
-                            onClick={() => setQualifier(match.team_a)}
-                        >
-                            {match.team_a}
-                        </Button>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Button
+                                type="button"
+                                className="smooth-button rounded-2xl"
+                                variant={
+                                    qualifier ===
+                                        match.team_a
+                                        ? "default"
+                                        : "secondary"
+                                }
+                                onClick={() =>
+                                    setQualifier(match.team_a)
+                                }
+                            >
+                                {match.team_a}
+                            </Button>
 
-                        <Button
-                            type="button"
-                            variant={
-                                qualifier === match.team_b
-                                    ? "default"
-                                    : "secondary"
-                            }
-                            className="smooth-button rounded-2xl"
-                            onClick={() => setQualifier(match.team_b)}
-                        >
-                            {match.team_b}
-                        </Button>
+                            <Button
+                                type="button"
+                                className="smooth-button rounded-2xl"
+                                variant={
+                                    qualifier ===
+                                        match.team_b
+                                        ? "default"
+                                        : "secondary"
+                                }
+                                onClick={() =>
+                                    setQualifier(match.team_b)
+                                }
+                            >
+                                {match.team_b}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
             <Button
                 type="submit"

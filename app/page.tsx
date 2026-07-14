@@ -78,7 +78,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* <PredictionTicker /> */}
+      <PredictionTicker />
 
       <MatchListByDate />
     </section>
